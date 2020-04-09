@@ -1,0 +1,20 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: "{{.Values.deployment.appname}}"
+spec:
+  selector:
+    matchLabels:
+      app: "{{.Values.deployment.appname}}"
+  replicas: {{.Values.deployment.replicas}}
+  template:
+    metadata:
+      labels:
+        app: "{{.Values.deployment.appname}}"
+    spec:
+      containers:
+      - name: "{{.Values.deployment.appname}}"
+        image: "{{.Values.image.repository}}/mkhelloworld:{{.Values.image.tag}}"
+        imagePullPolicy: "{{.Values.image.pullPolicy}}"
+        ports:
+        - containerPort: 8080
