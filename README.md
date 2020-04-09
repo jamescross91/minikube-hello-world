@@ -36,6 +36,34 @@ This is extremely easy, thanks to the Makefile (obviously ensure make is install
 2. Clone this repo
 3. Run `make upgrade DOCKER_IMAGE_PATCH_VERSION=$RANDOM`.  Note this generates a random [semver patch](https://semver.org) for the Docker image.  This is to workaround the fact that if you're using minikube or Docker Desktop, Kubernetes won't be able to read your local Docker image registry and as such imagePullPolicy is set to never.
 
+The output of this command will let you know what has been launched and where the service is running, for example:
+```
+Release "minikube-hello-world" has been upgraded.
+LAST DEPLOYED: Thu Apr  9 15:29:55 2020
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/Deployment
+NAME                  READY  UP-TO-DATE  AVAILABLE  AGE
+minikube-hello-world  3/3    1           3          124m
+
+==> v1/Pod(related)
+NAME                                   READY  STATUS             RESTARTS  AGE
+minikube-hello-world-55cc8d9bdc-s6n4c  0/1    ContainerCreating  0         0s
+minikube-hello-world-7d59c48b8d-7phzv  1/1    Running            0         20m
+minikube-hello-world-7d59c48b8d-swrn5  1/1    Running            0         20m
+minikube-hello-world-7d59c48b8d-v9js5  1/1    Running            0         20m
+
+==> v1/Service
+NAME                          TYPE      CLUSTER-IP      EXTERNAL-IP  PORT(S)         AGE
+minikube-hello-world-service  NodePort  10.103.233.167  <none>       8080:30925/TCP  87m
+```
+
+shows us that the service has been deployed, and is mapping port `8080` on the internal pods to port `30925` on each Kubernetes node, in our case localhost.
+
+Browsing to `http://localhost:30925` will show the Hello World page as defined in [hello_world.py](minikube-hello-world/hello_world.py).
+
 ## Customisation
 Certain elements can be customised:
 * Image repository
